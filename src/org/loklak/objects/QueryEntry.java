@@ -212,7 +212,7 @@ public class QueryEntry extends AbstractIndexEntry {
     }
 
     public Map<String, Object> toMap() {
-        Map<String, Object> m = new LinkedHashMap<>();
+        Map<String, Object> m = new LinkedHashMap<String, Object>();
         m.put("query", this.query);
         m.put("query_length", this.query_length);
         m.put("source_type", this.source_type.name());
@@ -275,11 +275,11 @@ public class QueryEntry extends AbstractIndexEntry {
             Matcher m = tokenizerPattern.matcher(q);
             while (m.find()) tokens.add(m.group(1));
 
-            this.constraints_positive = new HashSet<>();
-            this.constraints_negative = new HashSet<>();
+            this.constraints_positive = new HashSet<String>();
+            this.constraints_negative = new HashSet<String>();
             this.modifier = new HashMap<String, String>();
             StringBuilder rawb = new StringBuilder(q.length() + 1);
-            Set<String> hashtags = new HashSet<>();
+            Set<String> hashtags = new HashSet<String>();
             for (String t : tokens) {
                 if (t.startsWith("/")) {
                     constraints_positive.add(t.substring(1));
@@ -337,7 +337,7 @@ public class QueryEntry extends AbstractIndexEntry {
         q = q.replaceAll(" AND ", " "); // AND is default
 
         // tokenize the query
-        ArrayList<String> list = new ArrayList<>();
+        ArrayList<String> list = new ArrayList<String>();
         Matcher m = term4ORPattern.matcher(q);
         while (m.find()) {
             String d = m.group(1);
