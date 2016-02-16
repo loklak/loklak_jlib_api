@@ -135,6 +135,10 @@ public class UserEntry extends AbstractIndexEntry {
         if (this.map.containsKey(field_profile_image)) json.put(field_profile_image, this.map.get(field_profile_image));
         return json;
     }
+    
+    public String toString() {
+        return this.toJSON().toString();
+    }
 
     @Override
     public boolean equals(Object o) {
