@@ -21,17 +21,21 @@
 
 package org.loklak.harvester;
 
+import org.loklak.harvester.TwitterScraper.TwitterTweet;
 import org.loklak.objects.MessageEntry;
 import org.loklak.objects.Timeline;
 import org.loklak.objects.UserEntry;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -50,8 +54,8 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class TwitterScraper {
 
-    public static ExecutorService executor = Executors.newFixedThreadPool(20);
-
+    public final static ExecutorService executor = Executors.newFixedThreadPool(40);
+    
     public static Timeline search(String query, final Timeline.Order order) {
         String https_url = "";
 
@@ -84,8 +88,27 @@ public class TwitterScraper {
         };
         return timeline;
     }
+
+    private static Timeline parse(
+            final File file,
+            final Timeline.Order order) {
+        Timeline timeline = null;
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
+            timeline = search(br, order);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (timeline == null) timeline = new Timeline(order);
+        }
+
+        if (timeline != null) timeline.setScraperInfo("local");
+        return timeline;
+    }
     
-    public static Timeline search(final BufferedReader br, final Timeline.Order order) throws IOException {
+    public static Timeline search(
+            final BufferedReader br,
+            final Timeline.Order order) throws IOException {
         Timeline timelineReady = new Timeline(order);
         String input;
         Map<String, prop> props = new HashMap<String, prop>();
@@ -250,15 +273,16 @@ public class TwitterScraper {
         }
     }
 
-    final static Pattern timeline_link_pattern = Pattern.compile("<a .*?href=\"(.*?)\".*?data-expanded-url=\"(.*?)\".*?twitter-timeline-link.*title=\"(.*?)\".*?>.*?</a>");
-    final static Pattern timeline_embed_pattern = Pattern.compile("<a .*?href=\"(.*?)\".*?twitter-timeline-link.*?>pic.twitter.com/(.*?)</a>");
-    final static Pattern emoji_pattern = Pattern.compile("<img .*?class=\"twitter-emoji\".*?alt=\"(.*?)\".*?>");
+    final static Pattern hashtag_pattern = Pattern.compile("<a href=\"/hashtag/.*?\".*?class=\"twitter-hashtag.*?\".*?><s>#</s><b>(.*?)</b></a>");
+    final static Pattern timeline_link_pattern = Pattern.compile("<a href=\"https://(.*?)\".*? data-expanded-url=\"(.*?)\".*?twitter-timeline-link.*?title=\"(.*?)\".*?>.*?</a>");
+    final static Pattern timeline_embed_pattern = Pattern.compile("<a href=\"(https://t.co/\\w+)\" class=\"twitter-timeline-link.*?>pic.twitter.com/(.*?)</a>");
+    final static Pattern emoji_pattern = Pattern.compile("<img .*?class=\"Emoji Emoji--forText\".*?alt=\"(.*?)\".*?>");
     final static Pattern doublespace_pattern = Pattern.compile("  ");
     final static Pattern cleanup_pattern = Pattern.compile(
-            "</?(s|b|strong)>|" +
-                    "<a href=\"/hashtag.*?>|" +
-                    "<a.*?class=\"twitter-atreply.*?>|" +
-                    "<span.*?span>"
+        "</?(s|b|strong)>|" +
+        "<a href=\"/hashtag.*?>|" +
+        "<a.*?class=\"twitter-atreply.*?>|" +
+        "<span.*?span>"
     );
 
     public static class TwitterTweet extends MessageEntry implements Runnable {
@@ -398,6 +422,29 @@ public class TwitterScraper {
         text = text.trim();
         return text;
     }
+
+   /**
+    * Usage: java twitter4j.examples.search.SearchTweets [query]
+    *
+    * @param args search query
+    */
+   public static void main(String[] args) {
+       //wget --no-check-certificate "https://twitter.com/search?q=eifel&src=typd&f=realtime"
+       
+       Timeline result = null;
+       if (args[0].startsWith("/"))
+           result = parse(new File(args[0]),Timeline.Order.CREATED_AT);
+       else
+           result = TwitterScraper.search(args[0], Timeline.Order.CREATED_AT);
+       for (MessageEntry tweet : result) {
+           if (tweet instanceof TwitterTweet) {
+               ((TwitterTweet) tweet).waitReady(10000);
+           }
+           System.out.println(tweet.getCreatedAt().toString() + " from @" + tweet.getScreenName() + " - " + tweet.getText(Integer.MAX_VALUE, ""));
+       }
+       System.out.println("count: " + result.size());
+       System.exit(0);
+   }
 
 }
 

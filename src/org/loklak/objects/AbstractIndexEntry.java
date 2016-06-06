@@ -26,16 +26,26 @@ import org.joda.time.format.ISODateTimeFormat;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.loklak.tools.UTF8;
 
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashSet;
 
-public class AbstractIndexEntry {
+public abstract class AbstractIndexEntry implements ObjectEntry {
 
     public AbstractIndexEntry() {
     }
 
+    public String toString() {
+        return this.toJSON().toString();
+    }
+
+    public byte[] toJSONBytes() {
+        String s = toString();
+        return s == null ? null : UTF8.getBytes(s);
+    }
+    
     // helper methods to write json
 
     public final static DateTimeFormatter utcFormatter = ISODateTimeFormat.dateTime().withZoneUTC();

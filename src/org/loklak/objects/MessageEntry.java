@@ -38,7 +38,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class MessageEntry extends AbstractIndexEntry {
+public class MessageEntry extends AbstractIndexEntry implements ObjectEntry {
 
     public static final String RICH_TEXT_SEPARATOR = "\n***\n";
 
@@ -434,6 +434,11 @@ public class MessageEntry extends AbstractIndexEntry {
         while (m.find()) l.add(m.group(g));
         for (String r: l) {int i = s.indexOf(r); s.replace(i, i + r.length(), "");}
         return l;
+    }
+    
+    @Override
+    public JSONObject toJSON() {
+        return toJSON(null, true, Integer.MAX_VALUE, ""); // very important to include calculated data here because that is written into the index using the abstract index factory
     }
 
     public JSONObject toJSON(final UserEntry user, final boolean calculatedData, final int iflinkexceedslength, final String urlstub) throws JSONException {

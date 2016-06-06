@@ -102,8 +102,8 @@ public class QueryEntry extends AbstractIndexEntry {
         this.query = (String) json.get("query");
         this.query_length = (int) parseLong((Number) json.get("query_length"));
         String source_type_string = (String) json.get("source_type");
-        if (source_type_string == null) source_type_string = SourceType.USER.name();
-        this.source_type = SourceType.valueOf(source_type_string);
+        if (source_type_string == null) source_type_string = SourceType.TWITTER.toString();
+        this.source_type = new SourceType(source_type_string);
         this.timezoneOffset = (int) parseLong((Number) json.get("timezoneOffset"));
         Date now = new Date();
         this.query_first = parseDate(json.get("query_first"), now);
@@ -211,22 +211,18 @@ public class QueryEntry extends AbstractIndexEntry {
         return this.messages_per_day;
     }
 
-    public Map<String, Object> toMap() {
-        Map<String, Object> m = new LinkedHashMap<String, Object>();
+    @Override
+    public JSONObject toJSON() {
+        JSONObject m = new JSONObject();
         m.put("query", this.query);
         m.put("query_length", this.query_length);
-        m.put("source_type", this.source_type.name());
+        m.put("source_type", this.source_type.toString());
         m.put("timezoneOffset", this.timezoneOffset);
-        if (this.query_first != null)
-            m.put("query_first", utcFormatter.print(this.query_first.getTime()));
-        if (this.query_last != null)
-            m.put("query_last", utcFormatter.print(this.query_last.getTime()));
-        if (this.retrieval_last != null)
-            m.put("retrieval_last", utcFormatter.print(this.retrieval_last.getTime()));
-        if (this.retrieval_next != null)
-            m.put("retrieval_next", utcFormatter.print(this.retrieval_next.getTime()));
-        if (this.expected_next != null)
-            m.put("expected_next", utcFormatter.print(this.expected_next.getTime()));
+        if (this.query_first != null) m.put("query_first", utcFormatter.print(this.query_first.getTime()));
+        if (this.query_last != null) m.put("query_last", utcFormatter.print(this.query_last.getTime()));
+        if (this.retrieval_last != null) m.put("retrieval_last", utcFormatter.print(this.retrieval_last.getTime()));
+        if (this.retrieval_next != null) m.put("retrieval_next", utcFormatter.print(this.retrieval_next.getTime()));
+        if (this.expected_next != null) m.put("expected_next", utcFormatter.print(this.expected_next.getTime()));
         m.put("query_count", this.query_count);
         m.put("retrieval_count", this.retrieval_count);
         m.put("message_period", this.message_period);
@@ -235,7 +231,7 @@ public class QueryEntry extends AbstractIndexEntry {
         m.put("score_suggest", this.score_suggest);
         return m;
     }
-
+    
     private final static Pattern tokenizerPattern = Pattern.compile("([^\"]\\S*|\".+?\")\\s*"); // tokenizes Strings into terms respecting quoted parts
 
     private static enum Constraint {
