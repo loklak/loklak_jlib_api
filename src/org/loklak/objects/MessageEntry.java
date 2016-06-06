@@ -24,6 +24,7 @@ package org.loklak.objects;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.loklak.tools.JsonCompatHelper;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -458,11 +459,11 @@ public class MessageEntry extends AbstractIndexEntry implements ObjectEntry {
         if (this.provider_hash != null && this.provider_hash.length() > 0) json.put("provider_hash", this.provider_hash);
         json.put("retweet_count", this.retweet_count);
         json.put("favourites_count", this.favourites_count); // there is a slight inconsistency here in the plural naming but thats how it is noted in the twitter api
-        json.put("images", this.images);
+        JsonCompatHelper.put(json, "images", this.images);
         json.put("images_count", this.images.size());
-        json.put("audio", this.audio);
+        JsonCompatHelper.put(json, "audio", this.audio);
         json.put("audio_count", this.audio.size());
-        json.put("videos", this.videos);
+        JsonCompatHelper.put(json, "videos", this.videos);
         json.put("videos_count", this.videos.size());
         json.put("place_name", this.place_name);
         json.put("place_id", this.place_id);
