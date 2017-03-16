@@ -39,7 +39,7 @@ public class NetworkIO {
 
     private final static String charset = "UTF-8";
     private final static String CRLF = "\r\n";
-    private final static String USER_AGENT = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2";
+    private final static String USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.98 Safari/537.36";
 
     public static StringBuilder loadString(String url) throws IOException {
         StringBuilder sb = new StringBuilder();
