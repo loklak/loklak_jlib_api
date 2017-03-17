@@ -68,7 +68,7 @@ public class TwitterScraper {
             con.setConnectTimeout(15000 /* milliseconds */);
             con.setRequestMethod("GET");
             con.setDoInput(true);
-            con.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+            con.setRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.98 Safari/537.36");
 
             BufferedReader br = null;
             try {
@@ -130,7 +130,7 @@ public class TwitterScraper {
             }
             if ((p = input.indexOf("class=\"fullname")) > 0) {
                 props.put("userfullname", new prop(input, p, null));
-                continue;
+                // no continue because class=\"username is in the same line
             }
             if ((p = input.indexOf("class=\"username")) > 0) {
                 props.put("usernickname", new prop(input, p, null));
