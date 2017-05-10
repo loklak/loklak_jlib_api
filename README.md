@@ -14,4 +14,20 @@ If you want to use this library in an android project, you therefore have zero d
 If you want to use this library in any other java project, just include the jar files in the lib folder.
 
 ## How to build the library
+Project supports both ```ant``` and ```maven``` for building.
+
+### Ant
 Just run ```ant```. The resulting jar file can be found int the ```dist``` folder.
+
+### Maven
+After successful build using ```maven```, jar file can be found in ```target``` folder. Building 
+and testing using different IDEs:
+* In eclipse:
+    * Right click on *Project name* in package explorer > Run as > Maven Build ... > 
+    Write ```clean package``` in *goals*. Use the created run configuration to generate the jar 
+    file.
+    * Right click on *Project name* > Run as > Maven Test
+    
+    
+* In IntelliJ IDEA:
+    * View > Tool Windows > Maven Projects > Lifecycle > ```package``` or ```clean```.
