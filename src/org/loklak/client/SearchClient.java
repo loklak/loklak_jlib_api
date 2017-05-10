@@ -91,16 +91,18 @@ public class SearchClient {
 
         JSONObject json = JsonIO.loadJson(searchApiUrl);
 
-        if (json.length() == 0)
+        if (json.length() == 0) {
             return timeline;
+        }
 
         JSONArray statuses = json.getJSONArray(JSON_KEY_STATUSES);
         if (statuses != null) {
             for (int i = 0; i < statuses.length(); i++) {
                 JSONObject tweet = statuses.getJSONObject(i);
                 JSONObject user = tweet.getJSONObject(JSON_KEY_USER);
-                if (user == null)
+                if (user == null) {
                     continue;
+                }
                 tweet.remove(JSON_KEY_USER);
                 UserEntry userEntry = new UserEntry(user);
                 MessageEntry messageEntry = new MessageEntry(tweet);

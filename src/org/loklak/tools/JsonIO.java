@@ -50,18 +50,16 @@ public class JsonIO {
 
     /**
      * Facilitates to send POST request API calls
-     * @param requestURL Url to make API calls
+     * @param url Url to make API calls
      * @param jsonObjectKey key of JSONObject to be sent
      * @param jsonObject JSONObject to be sent
      * @return JSONObject from the host API
      * @throws IOException
      * @throws JSONException
      */
-    public static JSONObject pushJson(
-            String requestURL,
-            String jsonObjectKey,
-            JSONObject jsonObject) throws IOException, JSONException {
-        StringBuilder sb = NetworkIO.pushString(requestURL, jsonObjectKey, jsonObject.toString());
+    public static JSONObject pushJson(String url, String jsonObjectKey, JSONObject jsonObject)
+            throws IOException, JSONException {
+        StringBuilder sb = NetworkIO.pushString(url, jsonObjectKey, jsonObject.toString());
         return new JSONObject(sb.toString());
     }
 

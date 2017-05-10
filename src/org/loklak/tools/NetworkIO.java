@@ -63,8 +63,8 @@ public class NetworkIO {
     public static StringBuilder loadString(String url) throws IOException {
         StringBuilder sb = new StringBuilder();
         URLConnection uc = (new URL(url)).openConnection();
-        HttpURLConnection connection =
-                url.startsWith("https") ? (HttpsURLConnection) uc : (HttpURLConnection) uc;
+        HttpURLConnection connection = url.startsWith("https") ?
+                (HttpsURLConnection) uc : (HttpURLConnection) uc;
         try {
             connection.setReadTimeout(6000);
             connection.setConnectTimeout(6000);

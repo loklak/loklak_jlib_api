@@ -109,8 +109,9 @@ public class SuggestClient {
 
         JSONObject json = JsonIO.loadJson(suggestApiUrl);
 
-        if (json.length() == 0)
+        if (json.length() == 0) {
             return resultList;
+        }
 
         JSONArray queries = json.getJSONArray(JSON_KEY_QUERIES);
         if (queries != null) {

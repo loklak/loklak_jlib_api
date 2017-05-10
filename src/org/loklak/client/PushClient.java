@@ -51,8 +51,9 @@ public class PushClient {
     public static JSONObject push(String hostServerUrl, Timeline timeline)
             throws JSONException, IOException {
         // transmit the timeline
-        if (hostServerUrl.endsWith("/"))
+        if (hostServerUrl.endsWith("/")) {
             hostServerUrl = hostServerUrl.substring(0, hostServerUrl.length() - 1);
+        }
         String pushApiUrl = hostServerUrl + PUSH_API;
         return JsonIO.pushJson(pushApiUrl, JSON_DATA_KEY, timeline.toJSON(false));
     }
