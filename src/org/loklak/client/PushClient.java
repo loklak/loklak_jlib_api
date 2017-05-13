@@ -41,7 +41,7 @@ public class PushClient {
     private PushClient() {}
 
     /**
-     * transmits the {@link Timeline} to server hosting loklak_server
+     * Transmits the {@link Timeline} to server hosting loklak_server
      * @param hostServerUrl Url of server hosting loklak_server
      * @param timeline contains the details of scraped tweets
      * @return the JSONObject from the host API if the transfer was successful or null otherwise
@@ -54,6 +54,7 @@ public class PushClient {
         if (hostServerUrl.endsWith("/")) {
             hostServerUrl = hostServerUrl.substring(0, hostServerUrl.length() - 1);
         }
+        // url: https://api.loklak.org/api/push.json
         String pushApiUrl = hostServerUrl + PUSH_API;
         return JsonIO.pushJson(pushApiUrl, JSON_DATA_KEY, timeline.toJSON(false));
     }

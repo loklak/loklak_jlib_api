@@ -127,7 +127,7 @@ public class NetworkIO {
         PrintWriter writer = new PrintWriter(new OutputStreamWriter(outputStream, CHARSET), true);
 
         writer.append("--" + boundary).append(CRLF);
-        writer.append(HEADER_PARAM_CONTENT_DISPOSITION+ jsonDataKey + "\"").append(CRLF);
+        writer.append(HEADER_PARAM_CONTENT_DISPOSITION + jsonDataKey + "\"").append(CRLF);
         writer.append(HEADER_PARAM_CONTENT_TYPE + CHARSET).append(CRLF);
         writer.append(CRLF);
         writer.append(bodyText).append(CRLF);
