@@ -14,14 +14,14 @@ import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.loklak.Constants.HOST_SERVER_URL;
 
 /**
- * Created by skrpl on 5/13/17.
+ * This class provides unit-test for {@link SearchClient}.
  */
 public class SearchClientTest {
 
     private final static Class SEARCH_CLIENT_CLASS = SearchClient.class;
-    private final static String HOST_SERVER_URL = "https://api.loklak.org";
     private final static String SEARCH_QUERY = "fossasia";
     // names of fields in SearchClient class
     private final static String[] SEARCH_API_PARAMS = {
@@ -67,6 +67,9 @@ public class SearchClientTest {
     private static List<String> sSearchApiParamValues = new ArrayList<>();
     private static String sSearchApiUrl;
 
+    /**
+     * Creates the required url to send API request.
+     */
     @BeforeClass
     public static void createSearchApiUrl() {
         try {
@@ -90,6 +93,9 @@ public class SearchClientTest {
                 + sSearchApiParamValues.get(2) + sSearchApiParamValues.get(3); // param: minified
     }
 
+    /**
+     * Tests by checking whether the returned JSONObject has required keys.
+     */
     @Test
     public void testSearch() {
         JSONObject jsonObject = null;

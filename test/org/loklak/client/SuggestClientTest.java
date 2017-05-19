@@ -16,7 +16,7 @@ import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
 
 /**
- * This class is an unit-test for {@link SuggestClient}.
+ * This class provides unit-test for {@link SuggestClient}.
  */
 public class SuggestClientTest {
 

@@ -113,7 +113,7 @@ public class NetworkIO {
 
         URL url = new URL(requestURL);
         //HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        URLConnection urlConnection = (url).openConnection();
+        URLConnection urlConnection = url.openConnection();
         HttpURLConnection connection =
                 requestURL.startsWith("https") ? (HttpsURLConnection) urlConnection :
                         (HttpURLConnection) urlConnection;

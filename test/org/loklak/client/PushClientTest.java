@@ -3,26 +3,19 @@ package org.loklak.client;
 import org.json.JSONObject;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.loklak.TimelineStub;
 import org.loklak.harvester.TwitterScraper;
 import org.loklak.objects.Timeline;
 
 import java.io.IOException;
 
 import static org.junit.Assert.assertTrue;
+import static org.loklak.Constants.*;
 
 /**
- * This class is an unit-test for {@link PushClient}.
+ * This class provides unit-test for {@link PushClient}.
  */
 public class PushClientTest {
-
-    private final static String SEARCH_QUERY = "This is just a testing tweet used for writing " +
-            "unit-tests for loklak_jlib_api.";
-    private final String HOST_SERVER_URL = "https://api.loklak.org";
-    // keys of JSONObject in reply of push API
-    private final String JSON_KEY_STATUS = "status";
-    private final String JSON_KEY_MESSAGE = "message";
-    private final String JSON_KEY_RECORDS = "records";
-    private final String JSON_KEY_MPS = "mps";
 
     private static Timeline sTimeline = null;
 
@@ -34,7 +27,7 @@ public class PushClientTest {
      */
     @BeforeClass
     public static void createTimelineObject() {
-        sTimeline = TwitterScraper.search(SEARCH_QUERY, Timeline.Order.CREATED_AT);
+        sTimeline = (new TimelineStub()).getTimeline();
     }
 
     /**
@@ -51,10 +44,10 @@ public class PushClientTest {
             return;
         }
 
-        assertTrue(jsonObject.has(JSON_KEY_STATUS));
-        assertTrue(jsonObject.has(JSON_KEY_MESSAGE));
-        assertTrue(jsonObject.has(JSON_KEY_RECORDS));
-        assertTrue(jsonObject.has(JSON_KEY_MPS));
+        assertTrue(jsonObject.has(JSON_KEY_PUSH_STATUS));
+        assertTrue(jsonObject.has(JSON_KEY_PUSH_MESSAGE));
+        assertTrue(jsonObject.has(JSON_KEY_PUSH_RECORDS));
+        assertTrue(jsonObject.has(JSON_KEY_PUSH_MPS));
     }
 
 }
