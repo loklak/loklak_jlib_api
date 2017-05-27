@@ -8,8 +8,9 @@ import org.loklak.objects.Timeline;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThat;
 import static org.loklak.Constants.*;
+import static org.loklak.Utility.hasKey;
 
 /**
  *This class provides unit-test for {@link NetworkIO}.
@@ -39,12 +40,12 @@ public class NetworkIOTest {
             return;
         }
 
-        assertTrue(jsonObject.has(JSON_KEY_HELLO_PUBLIC_KEY));
-        assertTrue(jsonObject.has(JSON_KEY_HELLO_ALGORITHM_KEY));
-        assertTrue(jsonObject.has(JSON_KEY_HELLO_PEER_HASH));
-        assertTrue(jsonObject.has(JSON_KEY_HELLO_PEER_HASH_ALGORITHM));
-        assertTrue(jsonObject.has(JSON_KEY_HELLO_SESSION));
-        assertTrue(jsonObject.has(JSON_KEY_HELLO_STATUS));
+        assertThat(jsonObject, hasKey(JSON_KEY_HELLO_PUBLIC_KEY));
+        assertThat(jsonObject, hasKey(JSON_KEY_HELLO_ALGORITHM_KEY));
+        assertThat(jsonObject, hasKey(JSON_KEY_HELLO_PEER_HASH));
+        assertThat(jsonObject, hasKey(JSON_KEY_HELLO_PEER_HASH_ALGORITHM));
+        assertThat(jsonObject, hasKey(JSON_KEY_HELLO_SESSION));
+        assertThat(jsonObject, hasKey(JSON_KEY_HELLO_STATUS));
     }
 
     /**
@@ -61,9 +62,9 @@ public class NetworkIOTest {
         }
 
         JSONObject jsonObject = new JSONObject(pushReply);
-        assertTrue(jsonObject.has(JSON_KEY_PUSH_STATUS));
-        assertTrue(jsonObject.has(JSON_KEY_PUSH_MESSAGE));
-        assertTrue(jsonObject.has(JSON_KEY_PUSH_RECORDS));
-        assertTrue(jsonObject.has(JSON_KEY_PUSH_MPS));
+        assertThat(jsonObject, hasKey(JSON_KEY_PUSH_STATUS));
+        assertThat(jsonObject, hasKey(JSON_KEY_PUSH_MESSAGE));
+        assertThat(jsonObject, hasKey(JSON_KEY_PUSH_RECORDS));
+        assertThat(jsonObject, hasKey(JSON_KEY_PUSH_MPS));
     }
 }

@@ -12,9 +12,10 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.loklak.Constants.HOST_SERVER_URL;
+import static org.loklak.Utility.hasKey;
 
 /**
  * This class provides unit-test for {@link SearchClient}.
@@ -109,42 +110,42 @@ public class SearchClientTest {
             return;
         }
 
-        assertTrue(jsonObject.has(JSON_KEY_SEARCH_METADATA));
-        assertTrue(jsonObject.has(JSON_KEY_STATUSES));
-        assertTrue(jsonObject.has(JSON_KEY_AGGREGATIONS));
+        assertThat(jsonObject, hasKey(JSON_KEY_SEARCH_METADATA));
+        assertThat(jsonObject, hasKey(JSON_KEY_STATUSES));
+        assertThat(jsonObject, hasKey(JSON_KEY_AGGREGATIONS));
 
         JSONObject jsonObjectSearchMetadata = jsonObject.getJSONObject(JSON_KEY_SEARCH_METADATA);
-        assertTrue(jsonObjectSearchMetadata.has(SM_KEY_PERIOD));
-        assertTrue(jsonObjectSearchMetadata.has(SM_KEY_COUNT_BACKEND));
-        assertTrue(jsonObjectSearchMetadata.has(SM_KEY_START_RECORD));
-        assertTrue(jsonObjectSearchMetadata.has(SM_KEY_QUERY));
-        assertTrue(jsonObjectSearchMetadata.has(SM_KEY_SCRAPER_INFO));
-        assertTrue(jsonObjectSearchMetadata.has(SM_KEY_COUNT));
-        assertTrue(jsonObjectSearchMetadata.has(SM_KEY_COUNT_TWITTER_ALL));
-        assertTrue(jsonObjectSearchMetadata.has(SM_KEY_SERVICE_REDUCTION));
-        assertTrue(jsonObjectSearchMetadata.has(SM_KEY_COUNT_TWITTER_NEW));
-        assertTrue(jsonObjectSearchMetadata.has(SM_KEY_INDEX));
-        assertTrue(jsonObjectSearchMetadata.has(SM_KEY_CACHE_HITS));
-        assertTrue(jsonObjectSearchMetadata.has(SM_KEY_MAXIMUM_RECORDS));
-        assertTrue(jsonObjectSearchMetadata.has(SM_KEY_HITS));
-        assertTrue(jsonObjectSearchMetadata.has(SM_KEY_CLIENT));
-        assertTrue(jsonObjectSearchMetadata.has(SM_KEY_TIME));
+        assertThat(jsonObjectSearchMetadata, hasKey(SM_KEY_PERIOD));
+        assertThat(jsonObjectSearchMetadata, hasKey(SM_KEY_COUNT_BACKEND));
+        assertThat(jsonObjectSearchMetadata, hasKey(SM_KEY_START_RECORD));
+        assertThat(jsonObjectSearchMetadata, hasKey(SM_KEY_QUERY));
+        assertThat(jsonObjectSearchMetadata, hasKey(SM_KEY_SCRAPER_INFO));
+        assertThat(jsonObjectSearchMetadata, hasKey(SM_KEY_COUNT));
+        assertThat(jsonObjectSearchMetadata, hasKey(SM_KEY_COUNT_TWITTER_ALL));
+        assertThat(jsonObjectSearchMetadata, hasKey(SM_KEY_SERVICE_REDUCTION));
+        assertThat(jsonObjectSearchMetadata, hasKey(SM_KEY_COUNT_TWITTER_NEW));
+        assertThat(jsonObjectSearchMetadata, hasKey(SM_KEY_INDEX));
+        assertThat(jsonObjectSearchMetadata, hasKey(SM_KEY_CACHE_HITS));
+        assertThat(jsonObjectSearchMetadata, hasKey(SM_KEY_MAXIMUM_RECORDS));
+        assertThat(jsonObjectSearchMetadata, hasKey(SM_KEY_HITS));
+        assertThat(jsonObjectSearchMetadata, hasKey(SM_KEY_CLIENT));
+        assertThat(jsonObjectSearchMetadata, hasKey(SM_KEY_TIME));
 
         JSONArray jsonArrayStatus = jsonObject.getJSONArray(JSON_KEY_STATUSES);
         if (jsonArrayStatus.length() > 0) {
             JSONObject jsonObjectStatus = jsonArrayStatus.getJSONObject(0);
-            assertTrue(jsonObjectStatus.has(STATUS_KEY_TIMESTAMP));
-            assertTrue(jsonObjectStatus.has(STATUS_KEY_SCREEN_NAME));
-            assertTrue(jsonObjectStatus.has(STATUS_KEY_LINK ));
-            assertTrue(jsonObjectStatus.has(STATUS_KEY_USER ));
+            assertThat(jsonObjectStatus, hasKey(STATUS_KEY_TIMESTAMP));
+            assertThat(jsonObjectStatus, hasKey(STATUS_KEY_SCREEN_NAME));
+            assertThat(jsonObjectStatus, hasKey(STATUS_KEY_LINK ));
+            assertThat(jsonObjectStatus, hasKey(STATUS_KEY_USER ));
 
             JSONObject jsonObjectUser = jsonObjectStatus.getJSONObject(STATUS_KEY_USER);
-            assertTrue(jsonObjectUser.has(USER_KEY_SCREEN_NAME));
-            assertTrue(jsonObjectUser.has(USER_KEY_USER_ID));
-            assertTrue(jsonObjectUser.has(USER_KEY_NAME ));
-            assertTrue(jsonObjectUser.has(USER_KEY_PROFILE_IMAGE_URL));
-            assertTrue(jsonObjectUser.has(USER_KEY_APPEARANCE_FIRST));
-            assertTrue(jsonObjectUser.has(USER_KEY_APPEARANCE_LAST));
+            assertThat(jsonObjectUser, hasKey(USER_KEY_SCREEN_NAME));
+            assertThat(jsonObjectUser, hasKey(USER_KEY_USER_ID));
+            assertThat(jsonObjectUser, hasKey(USER_KEY_NAME ));
+            assertThat(jsonObjectUser, hasKey(USER_KEY_PROFILE_IMAGE_URL));
+            assertThat(jsonObjectUser, hasKey(USER_KEY_APPEARANCE_FIRST));
+            assertThat(jsonObjectUser, hasKey(USER_KEY_APPEARANCE_LAST));
         }
     }
 }

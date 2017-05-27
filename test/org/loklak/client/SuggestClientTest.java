@@ -12,8 +12,9 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.loklak.Utility.hasKey;
 
 /**
  * This class provides unit-test for {@link SuggestClient}.
@@ -98,35 +99,35 @@ public class SuggestClientTest {
             return;
         }
 
-        assertTrue(jsonObject.has(JSON_KEY_SEARCH_METADATA));
-        assertTrue(jsonObject.has(JSON_KEY_QUERIES));
+        assertThat(jsonObject, hasKey(JSON_KEY_SEARCH_METADATA));
+        assertThat(jsonObject, hasKey(JSON_KEY_QUERIES));
 
         JSONObject jsonMetadataObject = jsonObject.getJSONObject(JSON_KEY_SEARCH_METADATA);
-        assertTrue(jsonMetadataObject.has(SM_KEY_COUNT));
-        assertTrue(jsonMetadataObject.has(SM_KEY_HITS));
-        assertTrue(jsonMetadataObject.has(SM_KEY_QUERY));
-        assertTrue(jsonMetadataObject.has(SM_KEY_ORDER));
-        assertTrue(jsonMetadataObject.has(SM_KEY_ORDER_BY));
-        assertTrue(jsonMetadataObject.has(SM_KEY_CLIENT));
+        assertThat(jsonMetadataObject, hasKey(SM_KEY_COUNT));
+        assertThat(jsonMetadataObject, hasKey(SM_KEY_HITS));
+        assertThat(jsonMetadataObject, hasKey(SM_KEY_QUERY));
+        assertThat(jsonMetadataObject, hasKey(SM_KEY_ORDER));
+        assertThat(jsonMetadataObject, hasKey(SM_KEY_ORDER_BY));
+        assertThat(jsonMetadataObject, hasKey(SM_KEY_CLIENT));
 
         JSONArray jsonQueryArray = jsonObject.getJSONArray(JSON_KEY_QUERIES);
         if (jsonQueryArray.length() > 0) {
             JSONObject queryObject = jsonQueryArray.getJSONObject(0);
-            assertTrue(queryObject.has(QUERY_KEY_QUERY));
-            assertTrue(queryObject.has(QUERY_KEY_QUERY_COUNT));
-            assertTrue(queryObject.has(QUERY_KEY_MSG_PERIOD));
-            assertTrue(queryObject.has(QUERY_KEY_SOURCE_TYPE));
-            assertTrue(queryObject.has(QUERY_KEY_RET_LAST));
-            assertTrue(queryObject.has(QUERY_KEY_MSG_PER_DAY));
-            assertTrue(queryObject.has(QUERY_KEY_QUERY_LENGTH));
-            assertTrue(queryObject.has(QUERY_KEY_TIMEZONE_OFFSET));
-            assertTrue(queryObject.has(QUERY_KEY_RET_NEXT));
-            assertTrue(queryObject.has(QUERY_KEY_SCORE_RET));
-            assertTrue(queryObject.has(QUERY_KEY_QUERY_LAST));
-            assertTrue(queryObject.has(QUERY_KEY_EXPECTED_NEXT));
-            assertTrue(queryObject.has(QUERY_KEY_SCORE_SUGGEST));
-            assertTrue(queryObject.has(QUERY_KEY_RET_COUNT));
-            assertTrue(queryObject.has(QUERY_KEY_QUERY_FIRST));
+            assertThat(queryObject, hasKey(QUERY_KEY_QUERY));
+            assertThat(queryObject, hasKey(QUERY_KEY_QUERY_COUNT));
+            assertThat(queryObject, hasKey(QUERY_KEY_MSG_PERIOD));
+            assertThat(queryObject, hasKey(QUERY_KEY_SOURCE_TYPE));
+            assertThat(queryObject, hasKey(QUERY_KEY_RET_LAST));
+            assertThat(queryObject, hasKey(QUERY_KEY_MSG_PER_DAY));
+            assertThat(queryObject, hasKey(QUERY_KEY_QUERY_LENGTH));
+            assertThat(queryObject, hasKey(QUERY_KEY_TIMEZONE_OFFSET));
+            assertThat(queryObject, hasKey(QUERY_KEY_RET_NEXT));
+            assertThat(queryObject, hasKey(QUERY_KEY_SCORE_RET));
+            assertThat(queryObject, hasKey(QUERY_KEY_QUERY_LAST));
+            assertThat(queryObject, hasKey(QUERY_KEY_EXPECTED_NEXT));
+            assertThat(queryObject, hasKey(QUERY_KEY_SCORE_SUGGEST));
+            assertThat(queryObject, hasKey(QUERY_KEY_RET_COUNT));
+            assertThat(queryObject, hasKey(QUERY_KEY_QUERY_FIRST));
         }
     }
 }
