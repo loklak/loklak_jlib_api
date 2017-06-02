@@ -26,20 +26,41 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+/**
+ * Provides helper methods for sending GET and POST requests.
+ */
 public class JsonIO {
 
-    public static JSONObject loadJson(String url) throws JSONException, IOException {
-        StringBuilder sb = NetworkIO.loadString(url);
-        if (sb == null || sb.length() == 0) return new JSONObject();
-        JSONObject json = null;
-        json = new JSONObject(sb.toString());
-        return json;
+    // restricts instantiation of JsonIO
+    private JsonIO() {}
+
+    /**
+     * Facilitates to send GET request API calls
+     * @param requestUrl Url to make API calls
+     * @return JSONObject from the host API
+     * @throws JSONException
+     * @throws IOException
+     */
+    public static JSONObject loadJson(String requestUrl) throws JSONException, IOException {
+        StringBuilder sb = NetworkIO.loadString(requestUrl);
+        if (sb == null || sb.length() == 0)
+            return new JSONObject();
+        return new JSONObject(sb.toString());
     }
-    
-    public static JSONObject pushJson(String requestURL, String jsonDataName, JSONObject json_out) throws IOException, JSONException {
-        StringBuilder sb = NetworkIO.pushString(requestURL, jsonDataName, json_out.toString());
-        JSONObject json_in = new JSONObject(sb.toString());
-        return json_in;
+
+    /**
+     * Facilitates to send POST request API calls
+     * @param url Url to make API calls
+     * @param jsonObjectKey key of JSONObject to be sent
+     * @param jsonObject JSONObject to be sent
+     * @return JSONObject from the host API
+     * @throws IOException
+     * @throws JSONException
+     */
+    public static JSONObject pushJson(String url, String jsonObjectKey, JSONObject jsonObject)
+            throws IOException, JSONException {
+        StringBuilder sb = NetworkIO.pushString(url, jsonObjectKey, jsonObject.toString());
+        return new JSONObject(sb.toString());
     }
 
 }

@@ -28,20 +28,34 @@ import org.json.JSONObject;
 import org.loklak.objects.Timeline;
 import org.loklak.tools.JsonIO;
 
+/**
+ *The PushClient class provides <code>push</code> method which delivers scraped tweets to server
+ * hosting loklak_server.
+ */
 public class PushClient {
 
+    private static final String PUSH_API = "/api/push.json";
+    private static final String JSON_DATA_KEY = "data";
+
+    // restricts instantiation of PushClient
+    private PushClient() {}
+
     /**
-     * transmit the timeline to several hosts
-     * @param timeline
-     * @return the json object from the host api if the transfer was successful or null otherwise
+     * Transmits the {@link Timeline} to server hosting loklak_server
+     * @param hostServerUrl Url of server hosting loklak_server
+     * @param timeline contains the details of scraped tweets
+     * @return the JSONObject from the host API if the transfer was successful or null otherwise
      * @throws IOException 
      * @throws JSONException 
      */
-    public static JSONObject push(String hoststub, Timeline timeline) throws JSONException, IOException {
+    public static JSONObject push(String hostServerUrl, Timeline timeline)
+            throws JSONException, IOException {
         // transmit the timeline
-        if (hoststub.endsWith("/")) hoststub = hoststub.substring(0, hoststub.length() - 1);
-        JSONObject json = JsonIO.pushJson(hoststub + "/api/push.json", "data", timeline.toJSON(false));
-        if (json != null) return json;
-        return null;
+        if (hostServerUrl.endsWith("/")) {
+            hostServerUrl = hostServerUrl.substring(0, hostServerUrl.length() - 1);
+        }
+        // url: https://api.loklak.org/api/push.json
+        String pushApiUrl = hostServerUrl + PUSH_API;
+        return JsonIO.pushJson(pushApiUrl, JSON_DATA_KEY, timeline.toJSON(false));
     }
 }

@@ -31,51 +31,104 @@ import org.loklak.tools.JsonIO;
 import java.io.IOException;
 import java.net.URLEncoder;
 
+/**
+ * The SuggestClient class provides <code>suggest</code> method which delivers search suggestions
+ * for tweets.
+ */
 public class SuggestClient {
 
+    private static final String SUGGEST_API = "/api/suggest.json?q=";
+    private static final String ENCODING = "UTF-8";
+    // suggest api parameter fields
+    private static final String PARAM_TIMEZONE_OFFSET = "&timezoneOffset=";
+    private static final String PARAM_COUNT = "&count=";
+    private static final String PARAM_SOURCE = "&source=";
+    private static final String PARAM_MINIFIED = "&minified=";
+    private static final String PARAM_ORDER = "&order=";
+    private static final String PARAM_ORDER_BY = "&orderby=";
+    private static final String PARAM_SINCE = "&since=";
+    private static final String PARAM_UNTIL = "&until=";
+    private static final String PARAM_SELECT_BY = "&selectby=";
+    private static final String PARAM_RANDOM = "&random=";
+    // suggest API parameter values
+    private static final String PARAM_SOURCE_VALUE = "all";
+    private static final String PARAM_MINIFIED_VALUE = "true";
+    // key of JSONObjects
+    private static final String JSON_KEY_SEARCH_METADATA = "search_metadata";
+    private static final String JSON_KEY_QUERIES = "queries";
+    private static final String JSON_KEY_HITS = "hits";
+
+    // restricts instantiation of SuggestClient
+    private SuggestClient() {}
+
+    // TODO: documentation of selectBy and random
+    /**
+     * Returns a {@link ResultList} of type {@link QueryEntry} containing search suggestions for
+     * tweets matching <code>query</code>
+     * @param hostServerUrl Url of server hosting loklak_server
+     * @param query query string
+     * @param source tweet searching source, possible values: cache, twitter, all (default)
+     * @param count maximum number of search result for the query
+     * @param order possible values: desc, asc; default: desc
+     * @param orderBy a field name of the query index schema, i.e. retrieval_next or query_count
+     * @param timezoneOffset offset of a timezone in minutes
+     * @param since left bound of a query time
+     * @param until right bound of a query time
+     * @param selectBy
+     * @param random
+     * @return search suggestions as ResultList<QueryEntry>
+     * @throws JSONException
+     * @throws IOException
+     */
     public static ResultList<QueryEntry> suggest(
-            final String protocolhostportstub,
-            final String q,
+            final String hostServerUrl,
+            final String query,
             final String source,
             final int count,
             final String order,
-            final String orderby,
+            final String orderBy,
             final int timezoneOffset,
             final String since,
             final String until,
-            final String selectby,
+            final String selectBy,
             final int random) throws JSONException, IOException {
-        ResultList<QueryEntry>  rl = new ResultList<QueryEntry>();
-        String urlstring = "";
-        urlstring = protocolhostportstub + "/api/suggest.json?q=" + URLEncoder.encode(q.replace(' ', '+'), "UTF-8") +
-            "&timezoneOffset=" + timezoneOffset +
-            "&count=" + count +
-            "&source=" + (source == null ? "all" : source) +
-            (order == null ? "" : ("&order=" + order)) +
-            (orderby == null ? "" : ("&orderby=" + orderby)) +
-            (since == null ? "" : ("&since=" + since)) +
-            (until == null ? "" : ("&until=" + until)) +
-            (selectby == null ? "" : ("&selectby=" + selectby)) +
-            (random < 0 ? "" : ("&random=" + random)) +
-            "&minified=true";
-        JSONObject json = JsonIO.loadJson(urlstring);
-        if (json == null || json.length() == 0) return rl;
-        JSONArray queries = json.getJSONArray("queries");
+        ResultList<QueryEntry>  resultList = new ResultList<>();
+        String suggestApiUrl = hostServerUrl
+                + SUGGEST_API
+                + URLEncoder.encode(query.replace(' ', '+'), ENCODING)
+                + PARAM_TIMEZONE_OFFSET + timezoneOffset
+                + PARAM_COUNT + count
+                + PARAM_SOURCE + (source == null ? PARAM_SOURCE_VALUE : source)
+                + (order == null ? "" : (PARAM_ORDER + order))
+                + (orderBy == null ? "" : (PARAM_ORDER_BY + orderBy))
+                + (since == null ? "" : (PARAM_SINCE + since))
+                + (until == null ? "" : (PARAM_UNTIL + until))
+                + (selectBy == null ? "" : (PARAM_SELECT_BY + selectBy))
+                + (random < 0 ? "" : (PARAM_RANDOM + random))
+                + PARAM_MINIFIED + PARAM_MINIFIED_VALUE;
+
+        JSONObject json = JsonIO.loadJson(suggestApiUrl);
+
+        if (json.length() == 0) {
+            return resultList;
+        }
+
+        JSONArray queries = json.getJSONArray(JSON_KEY_QUERIES);
         if (queries != null) {
             for (int i = 0; i < queries.length(); i++) {
-                JSONObject query = queries.getJSONObject(i);
-                if (query == null) continue;
-                QueryEntry qe = new QueryEntry(query);
-                rl.add(qe);
+                JSONObject queryJsonObject = queries.getJSONObject(i);
+                if (queryJsonObject == null) continue;
+                QueryEntry queryEntry = new QueryEntry(queryJsonObject);
+                resultList.add(queryEntry);
             }
         }
 
-        JSONObject metadata = json.getJSONObject("search_metadata");
+        JSONObject metadata = json.getJSONObject(JSON_KEY_SEARCH_METADATA);
         if (metadata != null) {
-            long hits = metadata.getLong("hits");
-            rl.setHits(hits);
+            long hits = metadata.getLong(JSON_KEY_HITS);
+            resultList.setHits(hits);
         }
-        return rl;
+        return resultList;
     }
 
 }

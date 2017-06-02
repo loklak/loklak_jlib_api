@@ -19,10 +19,10 @@
 
 package org.loklak.tools;
 
-import java.util.Collection;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.Collection;
 
 /**
  * Provides workaround methods for different JSONObject implementations in the
@@ -30,22 +30,25 @@ import org.json.JSONObject;
  */
 public class JsonCompatHelper {
 
-  private static boolean hasCollectionMethod;
-  static {
-    try {
-      hasCollectionMethod = JSONObject.class.getMethod("put", new Class[] { String.class, Collection.class }) != null;
-    } catch (NoSuchMethodException | SecurityException e) {
-      hasCollectionMethod = false;
-    }
-  }
+    private static final String JSON_OBJECT_METHOD_NAME = "put";
+    private static boolean hasCollectionMethod;
 
-  public static JSONObject put(final JSONObject jsonObject, final String key, final Collection<?> value) {
-
-    if (hasCollectionMethod) {
-      return jsonObject.put(key, value);
-    } else {
-      return jsonObject.put(key, new JSONArray(value));
+    static {
+        try {
+            hasCollectionMethod = JSONObject.class.getMethod(
+                    JSON_OBJECT_METHOD_NAME, new Class[]{String.class, Collection.class}) != null;
+        } catch (NoSuchMethodException | SecurityException e) {
+            hasCollectionMethod = false;
+        }
     }
-  }
+
+    public static JSONObject put(
+            final JSONObject jsonObject, final String key, final Collection<?> value) {
+        if (hasCollectionMethod) {
+            return jsonObject.put(key, value);
+        } else {
+            return jsonObject.put(key, new JSONArray(value));
+        }
+    }
 
 }
