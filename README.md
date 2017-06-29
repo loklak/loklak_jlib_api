@@ -1,4 +1,6 @@
-# loklakj_lib
+# loklak_jlib_api
+[![Build Status](https://api.travis-ci.org/loklak/loklak_jlib_api.svg)](https://travis-ci.org/loklak/loklak_jlib_api)
+
 This is the loklak java api.
 One Library to find them, One Library to bring them all.
 
