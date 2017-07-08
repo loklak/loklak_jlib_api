@@ -3,8 +3,8 @@ package org.loklak.tools;
 import org.json.JSONObject;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.loklak.TimelineStub;
-import org.loklak.objects.Timeline;
+import org.loklak.client.APIGenerator;
+import org.loklak.client.LoklakAPI;
 
 import java.io.IOException;
 
@@ -17,15 +17,16 @@ import static org.loklak.Utility.hasKey;
  */
 public class NetworkIOTest {
 
-    private static Timeline sTimeline;
+    private static JSONObject searchAPIResult;
 
     /**
-     * Timeline objected is assigned to the return value of <code>search</code> method in
-     * {@link org.loklak.harvester.TwitterScraper} class.
+     * Result of <code>search</code> API endpoint is obtained, using {@link LoklakAPI} and
+     * {@link APIGenerator}.
      */
     @BeforeClass
-    public static void createHelloApiUrlAndTimeline() {
-        sTimeline = (new TimelineStub()).getTimeline();
+    public static void getSearchApiResult() {
+        LoklakAPI loklakAPI = APIGenerator.createApiMethods(LoklakAPI.class, HOST_SERVER_URL);
+        searchAPIResult = loklakAPI.search("linux");
     }
 
     /**
@@ -56,7 +57,7 @@ public class NetworkIOTest {
         String pushReply;
         try {
             pushReply = NetworkIO.pushString(
-                    PUSH_API_URL, "data", sTimeline.toJSON(false).toString()).toString();
+                    PUSH_API_URL, "data", searchAPIResult.toString()).toString();
         } catch (IOException | NullPointerException e) {
             return;
         }
